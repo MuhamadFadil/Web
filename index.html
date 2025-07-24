@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selamat Ulang Tahun Nabila Salma!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      font-family: 'Comic Sans MS', cursive;
+      background: radial-gradient(circle at top left, #ffdee9, #b5fffc);
+      animation: bgPulse 10s infinite alternate;
+    }
+
+    @keyframes bgPulse {
+      0% { background: radial-gradient(circle at top left, #ffdee9, #b5fffc); }
+      100% { background: radial-gradient(circle at bottom right, #ffe5ec, #aee1f9); }
+    }
+
+    .container {
+      text-align: center;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2em;
+      z-index: 2;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3em;
+      animation: pop 1s ease-in-out, bounce 2s infinite alternate;
+    }
+
+    h2 {
+      font-size: 2em;
+      color: #ff69b4;
+      margin-top: 0.5em;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.6;
+      animation: fadeIn 4s ease-in-out;
+    }
+
+    .cake {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .cake img {
+      width: 150px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    .balloons, .flowers {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .balloon, .flower {
+      width: 60px;
+      height: 80px;
+      border-radius: 50%;
+      position: relative;
+      animation: floatUp 8s linear infinite;
+    }
+
+    .balloon::after, .flower::after {
+      content: '';
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 30px;
+      background: #555;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh);
+        opacity: 0;
+      }
+    }
+
+    canvas.confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Musik -->
+  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+
+  <div class="container">
+    <h1>Selamat Ulang Tahun 🎉</h1>
+    <h2 id="nama"></h2>
+    <p>Nabilaku yang paling imut, suka ngambek — semoga selalu diberikan kesehatan dan kebahagiaan 🤍</p>
+    <p>Maaf ya karena aku sempat percaya kalau ulang tahun kamu bulan September 😅</p>
+    <p>Semoga semua harapanmu tercapai 💖</p>
+  </div>
+
+  <div class="cake">
+    <img src="https://cdn-icons-png.flaticon.com/512/913/913379.png" alt="Kue Ulang Tahun">
+  </div>
+
+  <div class="balloons">
+    <div class="balloon" style="background:#ff4d4d;"></div>
+    <div class="balloon" style="background:#ffd700;"></div>
+    <div class="balloon" style="background:#90ee90;"></div>
+    <div class="balloon" style="background:#87cefa;"></div>
+    <div class="balloon" style="background:#dda0dd;"></div>
+  </div>
+
+  <div class="flowers">
+    <div class="flower" style="background:#ffb6c1;"></div>
+    <div class="flower" style="background:#ff69b4;"></div>
+    <div class="flower" style="background:#ff1493;"></div>
+    <div class="flower" style="background:#db7093;"></div>
+    <div class="flower" style="background:#c71585;"></div>
+  </div>
+
+  <canvas class="confetti" id="confettiCanvas"></canvas>
+
+  <script>
+    // Umur otomatis
+    const nama = "Nabila Salma";
+    const birthDate = new Date("2004-07-24");
+    const now = new Date();
+    let age = now.getFullYear() - birthDate.getFullYear();
+    const birthdayThisYear = new Date(now.getFullYear(), 6, 24);
+    if (now < birthdayThisYear) age--;
+    document.getElementById("nama").innerText = `${nama} yang ke-${age + 1}`;
+
+    // Confetti animasi
+    const canvasConfetti = document.getElementById("confettiCanvas");
+    const context = canvasConfetti.getContext("2d");
+    canvasConfetti.width = window.innerWidth;
+    canvasConfetti.height = window.innerHeight;
+
+    const confettis = Array.from({ length: 200 }, () => ({
+      x: Math.random() * canvasConfetti.width,
+      y: Math.random() * canvasConfetti.height,
+      r: Math.random() * 6 + 2,
+      d: Math.random() * 3 + 1,
+      color: `hsl(${Math.random() * 360}, 100%, 70%)`
+    }));
+
+    function drawConfetti() {
+      context.clearRect(0, 0, canvasConfetti.width, canvasConfetti.height);
+      confettis.forEach(c => {
+        context.beginPath();
+        context.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        context.fillStyle = c.color;
+        context.fill();
+      });
+      moveConfetti();
+    }
+
+    function moveConfetti() {
+      confettis.forEach(c => {
+        c.y += c.d;
+        if (c.y > canvasConfetti.height) {
+          c.y = -10;
+          c.x = Math.random() * canvasConfetti.width;
+        }
+      });
+    }
+
+    setInterval(drawConfetti, 30);
+  </script>
+</body>
+</html>
